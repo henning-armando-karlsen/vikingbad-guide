@@ -1,0 +1,3363 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vikingbad Studio — Komplett prosessguide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1A1A1A; --sand:#CBC4AF; --sand20:#F0EDE8; --sand30:#E2DDD3; --sand40:#D6D0C7;
+  --brun:#9D8068; --brun10:#F3EDE8; --brun20:#EAE3DC; --brun40:#CFC4BA;
+  --oliven:#5E6A60; --oliv10:#EEF1EE; --oliv20:#D8DDD9; --oliv40:#AFBAB0;
+  --oransj:#F4835A; --oran10:#FEF0EA; --oran20:#FDDFD3;
+  --red:#A32020; --red10:#FAEAEA; --red20:#F5D0D0;
+  --white:#FFFFFF; --bg:#FAFAF8;
+  --border:#E4E0D8; --border2:#D0CBC0;
+  --muted:#888; --dim:#BBB;
+  --nav-h:50px;
+  --r:8px;
+  --shadow:0 2px 12px rgba(0,0,0,.07);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;font-size:15px;color:var(--ink);background:var(--bg);line-height:1.6;}
+
+/* ── TOP NAV ── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:var(--nav-h);background:var(--ink);
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  padding:0 1rem;
+  border-bottom:1px solid rgba(203,196,175,.12);
+}
+.top-tab{
+  padding:.42rem 1.4rem;background:transparent;
+  border:1px solid transparent;border-radius:5px;
+  font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);cursor:pointer;transition:all .18s;
+}
+.top-tab.active{background:var(--sand);color:var(--ink);border-color:var(--sand);}
+.top-tab:not(.active):hover{color:rgba(255,255,255,.75);background:rgba(203,196,175,.1);}
+
+/* ── HERO ── */
+.hero{
+  background:var(--ink);color:var(--white);
+  padding:calc(var(--nav-h) + 3.5rem) 5vw 3rem;
+  display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end;
+}
+.hero-logo img{height:28px;display:block;margin-bottom:1.8rem;opacity:.7;}
+.hero-kicker{font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--sand);margin-bottom:.6rem;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;line-height:1.1;color:var(--white);}
+.hero-title em{font-style:italic;color:var(--sand);}
+.hero-sub{font-size:.85rem;color:rgba(255,255,255,.45);margin-top:.7rem;max-width:480px;line-height:1.75;}
+.hero-stats{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;}
+.hero-stat{text-align:right;}
+.hero-stat .n{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--oransj);line-height:1;}
+.hero-stat .l{font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+
+/* ── FRISTER STRIP ── */
+.frister-strip{background:var(--ink);border-top:1px solid rgba(203,196,175,.1);padding:.8rem 5vw;}
+.frister-inner{display:flex;gap:0;flex-wrap:wrap;overflow:hidden;border-radius:var(--r);border:1px solid rgba(203,196,175,.12);}
+.frist-item{flex:1;min-width:140px;padding:.65rem .9rem;border-right:1px solid rgba(203,196,175,.1);}
+.frist-item:last-child{border-right:none;}
+.frist-val{font-size:.95rem;font-weight:700;line-height:1;margin-bottom:.2rem;}
+.frist-lbl{font-size:.72rem;color:rgba(255,255,255,.45);line-height:1.4;}
+.frist-note{font-size:.67rem;color:rgba(255,255,255,.28);font-style:italic;margin-top:.15rem;}
+.fv-red{color:var(--red);} .fv-orange{color:var(--oransj);} .fv-brun{color:var(--brun);}
+
+/* ── MODULE PANELS ── */
+.mod-panel{display:none;}
+.mod-panel.active{display:block;}
+main{max-width:960px;margin:0 auto;padding:2.5rem 5vw 6rem;}
+
+/* ── REVEAL ANIMATION ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* ══════════════════════════════════
+   KUNDEREISE
+══════════════════════════════════ */
+.kr-nav{
+  position:sticky;top:var(--nav-h);z-index:100;
+  background:var(--bg);border-bottom:1px solid var(--border);
+  padding:.3rem 5vw;
+}
+.kr-nav-inner{
+  max-width:960px;margin:0 auto;
+  display:flex;gap:2px;overflow-x:auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.kr-nav-inner::-webkit-scrollbar{display:none;}
+.kr-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:.35rem .7rem;background:transparent;border:1px solid transparent;
+  border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;
+  font-family:'Manrope',sans-serif;
+}
+.kr-nav-btn.active{background:var(--sand20);border-color:var(--sand30);}
+.kr-nav-btn:not(.active):hover{background:var(--sand20);}
+.kr-nav-num{font-size:.7rem;font-weight:700;color:var(--sand);line-height:1;}
+.kr-nav-lbl{font-size:.65rem;font-weight:600;letter-spacing:.04em;color:var(--muted);}
+
+.phase{margin-bottom:2.5rem;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.phase-head{display:flex;align-items:stretch;gap:0;min-height:90px;}
+.phase-head-num{
+  width:70px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:rgba(255,255,255,.9);
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.phase-head-body{padding:1rem 1.4rem;}
+.phase-eyebrow{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.25rem;}
+.phase-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;color:var(--white);line-height:1.2;margin-bottom:.25rem;}
+.phase-desc{font-size:.8rem;color:rgba(255,255,255,.5);font-style:italic;}
+.phase-meta{display:flex;gap:.5rem;flex-wrap:wrap;padding:.7rem 1.2rem;background:var(--sand20);border-bottom:1px solid var(--border);}
+.ph-meta-tag{font-size:.7rem;font-weight:600;color:var(--muted);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:.18rem .65rem;}
+.phase-tps{padding:1rem;display:flex;flex-direction:column;gap:.5rem;}
+
+.tp{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.tp-toggle{
+  width:100%;display:flex;align-items:flex-start;gap:1rem;padding:.85rem 1rem;
+  background:var(--white);border:none;cursor:pointer;text-align:left;transition:background .15s;
+}
+.tp-toggle:hover{background:var(--sand20);}
+.tp.open .tp-toggle{background:var(--sand20);}
+.tp-toggle-left{display:flex;align-items:center;gap:.7rem;flex:1;min-width:0;}
+.tp-num{font-size:.8rem;font-weight:700;color:var(--muted);flex-shrink:0;width:28px;}
+.tp-toggle-text{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.tp-title{font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.35;}
+.tp-badge{font-size:.67rem;font-weight:600;letter-spacing:.05em;background:var(--sand20);color:var(--muted);border-radius:20px;padding:.14rem .55rem;white-space:nowrap;align-self:flex-start;}
+.tp-ans{font-size:.74rem;color:var(--muted);flex-shrink:0;max-width:200px;text-align:right;font-style:italic;line-height:1.4;}
+.tp-chev{font-size:.75rem;color:var(--dim);flex-shrink:0;transition:transform .2s;margin-left:.5rem;padding-top:3px;}
+.tp.open .tp-chev{transform:rotate(180deg);}
+.tp-body{display:none;padding:0 1rem 1rem;border-top:1px solid var(--border);}
+.tp.open .tp-body{display:block;}
+
+.tp-sec{padding:.8rem 0;border-bottom:1px solid var(--border);}
+.tp-sec:last-child{border-bottom:none;}
+.tp-sec-label{font-size:.69rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.tp-sec-warn .tp-sec-label{color:var(--red);}
+.tp-list{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.tp-list li{font-size:.84rem;padding:.3rem .5rem .3rem 1rem;border-radius:5px;position:relative;}
+.tp-list li::before{content:'–';position:absolute;left:.1rem;color:var(--sand);}
+.tp-list .li-warn{background:var(--red10);color:var(--red);font-weight:600;padding-left:1.4rem;}
+.tp-list .li-warn::before{content:'!';color:var(--red);left:.35rem;}
+.tp-list .li-auto{color:var(--muted);font-style:italic;padding-left:1.4rem;}
+.tp-list .li-auto::before{content:'⚡';font-size:.75rem;left:.2rem;}
+.tp-neste{display:flex;gap:.5rem;align-items:flex-start;margin-top:.8rem;padding:.7rem .8rem;background:var(--oran10);border-radius:var(--r);}
+.tp-neste-arrow{font-size:1rem;color:var(--oransj);flex-shrink:0;}
+.tp-neste{font-size:.82rem;color:var(--muted);font-style:italic;line-height:1.5;}
+
+/* ══════════════════════════════════
+   RUTINER
+══════════════════════════════════ */
+.role-tabs-bar{display:flex;gap:2px;margin-bottom:2rem;flex-wrap:wrap;}
+.role-tab{
+  padding:.5rem 1.3rem;background:var(--sand20);border:1px solid var(--sand30);
+  border-radius:5px;font-family:'Manrope',sans-serif;font-size:.73rem;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .15s;color:var(--muted);
+}
+.role-tab.active.tab-forhandler{background:var(--brun);border-color:var(--brun);color:var(--white);}
+.role-tab.active.tab-designer{background:var(--oliven);border-color:var(--oliven);color:var(--white);}
+.role-tab.active.tab-koordinator{background:var(--red);border-color:var(--red);color:var(--white);}
+.role-tab:not(.active):hover{background:var(--sand30);}
+
+.role-panel{display:none;}
+.role-panel.active{display:block;}
+.role-intro{margin-bottom:2rem;padding:1.2rem 1.4rem;background:var(--sand20);border-radius:var(--r);border-left:4px solid var(--sand);}
+.role-desc{font-size:.87rem;color:var(--ink);line-height:1.7;margin-bottom:.8rem;}
+.role-regler{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.role-regler li{font-size:.82rem;color:var(--ink);padding:.28rem .5rem .28rem 1rem;position:relative;}
+.role-regler li::before{content:'·';position:absolute;left:.25rem;color:var(--sand);}
+.role-regler .regel-warn{color:var(--red);font-weight:600;}
+.role-regler .regel-warn::before{content:'!';color:var(--red);}
+.role-regler .regel-auto{color:var(--muted);font-style:italic;}
+.role-regler .regel-auto::before{content:'⚡';}
+
+.ru-step{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:.6rem;}
+.step-toggle{
+  width:100%;display:flex;align-items:flex-start;gap:1rem;padding:.9rem 1rem;
+  background:var(--white);border:none;cursor:pointer;text-align:left;transition:background .15s;
+}
+.step-toggle:hover{background:var(--sand20);}
+.ru-step.open .step-toggle{background:var(--sand20);}
+.step-toggle-left{display:flex;align-items:center;gap:.75rem;flex:1;min-width:0;}
+.step-num{
+  min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:700;color:var(--white);flex-shrink:0;
+}
+.role-panel[data-role="forhandler"] .step-num{background:var(--brun);}
+.role-panel[data-role="designer"] .step-num{background:var(--oliven);}
+.role-panel[data-role="koordinator"] .step-num{background:var(--red);}
+.step-title{display:block;font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.35;}
+.step-badge{font-size:.65rem;font-weight:600;letter-spacing:.05em;border-radius:20px;padding:.14rem .55rem;white-space:nowrap;margin-top:3px;display:inline-block;}
+.step-badge-forhandler{background:var(--brun20);color:var(--brun);}
+.step-badge-designer{background:var(--oliv20);color:var(--oliven);}
+.step-badge-koordinator{background:var(--red20);color:var(--red);}
+.step-trigger{font-size:.74rem;color:var(--muted);flex-shrink:0;max-width:200px;text-align:right;font-style:italic;line-height:1.4;}
+.step-chev{font-size:.75rem;color:var(--dim);flex-shrink:0;transition:transform .2s;padding-top:4px;}
+.ru-step.open .step-chev{transform:rotate(180deg);}
+.step-body{display:none;padding:0 1rem 1rem;border-top:1px solid var(--border);}
+.ru-step.open .step-body{display:block;}
+.step-sec{padding:.75rem 0;border-bottom:1px solid var(--border);}
+.step-sec:last-child{border-bottom:none;}
+.step-sec-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
+.step-sec-warn .step-sec-label{color:var(--red);}
+.step-list{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.step-list li{font-size:.84rem;padding:.28rem .5rem .28rem 1rem;border-radius:5px;position:relative;}
+.step-list li::before{content:'–';position:absolute;left:.1rem;color:var(--sand);}
+.step-list .li-warn{background:var(--red10);color:var(--red);font-weight:600;padding-left:1.4rem;}
+.step-list .li-warn::before{content:'!';color:var(--red);left:.35rem;}
+.step-list .li-auto{color:var(--muted);font-style:italic;}
+.step-list .li-auto::before{content:'⚡';}
+.step-neste{display:flex;gap:.5rem;align-items:flex-start;margin-top:.75rem;padding:.65rem .8rem;background:var(--oran10);border-radius:var(--r);font-size:.82rem;color:var(--muted);font-style:italic;}
+.step-neste span{color:var(--oransj);flex-shrink:0;}
+
+/* ══════════════════════════════════
+   SJEKKLISTER
+══════════════════════════════════ */
+.ck-section{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;}
+.ck-head{
+  width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+  padding:.9rem 1.1rem;background:var(--white);border:none;cursor:pointer;text-align:left;
+  transition:background .15s;
+}
+.ck-head:hover{background:var(--sand20);}
+.ck-section.open .ck-head{background:var(--sand20);}
+.ck-head-left{flex:1;min-width:0;}
+.ck-head-title{display:block;font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:2px;}
+.ck-head-sub{display:block;font-size:.74rem;color:var(--muted);font-style:italic;}
+.ck-head-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0;}
+.ck-badge{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.18rem .55rem;border-radius:20px;}
+.ck-badge-orange{background:var(--oran20);color:#b84a24;}
+.ck-badge-red{background:var(--red20);color:var(--red);}
+.ck-badge-brun{background:var(--brun20);color:var(--brun);}
+.ck-badge-oliven{background:var(--oliv20);color:var(--oliven);}
+.ck-badge-sand{background:var(--sand20);color:var(--muted);}
+.ck-progress-text{font-size:.72rem;font-weight:600;color:var(--muted);}
+.ck-chev{font-size:.72rem;color:var(--dim);transition:transform .2s;}
+.ck-section.open .ck-chev{transform:rotate(180deg);}
+.ck-progress-bar{height:3px;background:var(--border);}
+.ck-progress-fill{height:100%;background:var(--oliven);width:0;transition:width .3s;}
+.ck-body{display:none;padding:.5rem 1.1rem 1.1rem;border-top:1px solid var(--border);}
+.ck-section.open .ck-body{display:block;}
+.ck-sub{margin-top:1rem;}
+.ck-sub-head{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;display:flex;align-items:center;gap:6px;}
+.ck-sub-head::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--sand);}
+.ck-sub-items{display:flex;flex-direction:column;gap:2px;}
+.ck-item{
+  display:grid;grid-template-columns:36px 1fr;gap:.5rem;align-items:start;
+  padding:.45rem .6rem;border-radius:6px;cursor:pointer;
+  background:var(--white);border:1px solid transparent;transition:all .12s;
+}
+.ck-item:hover{background:var(--sand20);}
+.ck-item.checked{opacity:.5;text-decoration:line-through;background:var(--sand20);}
+.ck-item-warn{background:#fef2f2;border-color:#f5d0d0;}
+.ck-item-warn:hover{background:#fde8e8;}
+.ck-item-auto{background:var(--sand20);opacity:.75;}
+.ck-item.checked.ck-item-warn{background:var(--red20);}
+.ck-icon-col{display:flex;justify-content:center;align-items:flex-start;padding-top:2px;}
+.ck-icon{
+  width:18px;height:18px;border-radius:4px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;transition:all .12s;color:var(--dim);
+}
+.ck-item.checked .ck-icon{background:var(--oliven);border-color:var(--oliven);color:var(--white);font-size:.6rem;}
+.ck-item-warn .ck-icon{border-color:#f0a0a0;color:var(--red);font-weight:700;}
+.ck-item.checked.ck-item-warn .ck-icon{background:var(--red);border-color:var(--red);color:var(--white);}
+.ck-item-auto .ck-icon{font-size:.75rem;color:var(--muted);}
+.ck-text{font-size:.83rem;line-height:1.5;color:var(--ink);}
+.ck-item-warn .ck-text{color:var(--red);font-weight:600;}
+.ck-item-auto .ck-text{color:var(--muted);font-style:italic;}
+.ck-note{font-size:.72rem;color:var(--muted);margin-top:.15rem;font-style:italic;}
+.ck-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;padding:.5rem .6rem;background:var(--sand20);border-radius:6px;}
+.ck-summary-text{font-size:.74rem;font-weight:600;color:var(--muted);}
+.ck-reset{font-size:.68rem;padding:.2rem .55rem;background:transparent;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--dim);transition:all .15s;}
+.ck-reset:hover{background:var(--sand30);color:var(--ink);}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);padding:2rem 5vw;border-top:1px solid rgba(203,196,175,.1);}
+.foot-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+.foot-logo img{height:22px;opacity:.4;}
+.foot-tag{font-size:.75rem;color:rgba(255,255,255,.25);font-style:italic;letter-spacing:.06em;}
+.foot-copy{font-size:.7rem;color:rgba(255,255,255,.2);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:660px){
+  .hero{grid-template-columns:1fr;gap:1.5rem;}
+  .hero-stats{flex-direction:row;align-items:flex-start;justify-content:flex-start;}
+  .hero-stat{text-align:left;}
+  .top-tab{padding:.38rem .8rem;font-size:.67rem;}
+  .tp-ans{display:none;}
+  .step-trigger{display:none;}
+  .frister-inner{flex-direction:column;}
+  .frist-item{border-right:none;border-bottom:1px solid rgba(203,196,175,.1);}
+}
+</style>
+</head>
+<body>
+
+<!-- ── FIXED TOP NAV ── -->
+<nav class="top-nav">
+  <button class="top-tab active" onclick="switchMod('kundereise',this)">Kundereise</button>
+  <button class="top-tab" onclick="switchMod('rutiner',this)">Rutiner</button>
+  <button class="top-tab" onclick="switchMod('sjekklister',this)">Sjekklister</button>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     MOD 1: KUNDEREISE
+════════════════════════════════════════════ -->
+<div class="mod-panel active" id="mod-kundereise">
+
+  <header class="hero">
+    <div>
+      <div class="hero-logo">
+        <img src="https://www.vikingbad.no/wp-content/uploads/2025/01/Vikingbad-logo-hvit-RGB.svg" alt="Vikingbad"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="hero-kicker">Vikingbad Studio · Kundereise</div>
+      <h1 class="hero-title">Fra drøm til<br><em>ferdig bad</em></h1>
+      <p class="hero-sub">21 kontaktpunkter koordinert gjennom OptiMind — fra kundens første møte med Vikingbad til beslutning.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="n">9</span><span class="l">Faser</span></div>
+      <div class="hero-stat"><span class="n">21</span><span class="l">Kontaktpkt.</span></div>
+      <div class="hero-stat"><span class="n">24t</span><span class="l">Maks ventetid</span></div>
+      <div class="hero-stat"><span class="n">1:1</span><span class="l">Bad per tilbud</span></div>
+    </div>
+  </header>
+
+  <div class="frister-strip">
+    <div class="frister-inner">
+      <div class="frist-item"><div class="frist-val fv-red">Same dag</div><div class="frist-lbl">Befaringsdokumentasjon</div><div class="frist-note">Absolutt krav — blokkerer tegnetime</div></div>
+      <div class="frist-item"><div class="frist-val fv-red">Under befaring</div><div class="frist-lbl">Tegnetime bookes</div><div class="frist-note">Kan ikke gjøres i etterkant</div></div>
+      <div class="frist-item"><div class="frist-val fv-orange">24 timer</div><div class="frist-lbl">Forhandler ringer kunden</div><div class="frist-note">Rødt flagg etter 48t totalt</div></div>
+      <div class="frist-item"><div class="frist-val fv-orange">48 timer</div><div class="frist-lbl">Totaltilbud sendes</div><div class="frist-note">Rødt flagg til Studio Ansvarlig</div></div>
+      <div class="frist-item"><div class="frist-val fv-brun">2–3 virkedager</div><div class="frist-lbl">Tilbudsoppfølging</div><div class="frist-note">Forhandler ringer kunden</div></div>
+      <div class="frist-item"><div class="frist-val fv-brun">5 dager</div><div class="frist-lbl">Absolutt grense</div><div class="frist-note">Ingen tilbud liggende passivt</div></div>
+    </div>
+  </div>
+
+  <main>
+    <nav class="kr-nav" id="kr-nav"><div class="kr-nav-inner"><button class="kr-nav-btn" data-target="phase-1" onclick="krNav(this)"><span class="kr-nav-num">1</span><span class="kr-nav-lbl">Digital inng</span></button><button class="kr-nav-btn" data-target="phase-2" onclick="krNav(this)"><span class="kr-nav-num">2</span><span class="kr-nav-lbl">Analog innga</span></button><button class="kr-nav-btn" data-target="phase-3" onclick="krNav(this)"><span class="kr-nav-num">3</span><span class="kr-nav-lbl">Registrering</span></button><button class="kr-nav-btn" data-target="phase-4" onclick="krNav(this)"><span class="kr-nav-num">4</span><span class="kr-nav-lbl">Før befaring</span></button><button class="kr-nav-btn" data-target="phase-5" onclick="krNav(this)"><span class="kr-nav-num">5</span><span class="kr-nav-lbl">Befaring</span></button><button class="kr-nav-btn" data-target="phase-6" onclick="krNav(this)"><span class="kr-nav-num">6</span><span class="kr-nav-lbl">Forberedelse</span></button><button class="kr-nav-btn" data-target="phase-7" onclick="krNav(this)"><span class="kr-nav-num">7</span><span class="kr-nav-lbl">Etter tegnet</span></button><button class="kr-nav-btn" data-target="phase-8" onclick="krNav(this)"><span class="kr-nav-num">8</span><span class="kr-nav-lbl">Tilbudsoppfø</span></button><button class="kr-nav-btn" data-target="phase-9" onclick="krNav(this)"><span class="kr-nav-num">9</span><span class="kr-nav-lbl">Eskalering o</span></button></div></nav>
+
+<section class="phase reveal" id="phase-1">
+  <div class="phase-head" style="background:#2A2A2A">
+    <div class="phase-head-num">1</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 1</div>
+      <h2 class="phase-title">Digital inngang</h2>
+      <p class="phase-desc">Inspirasjon, stiler og booking</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">3 kontaktpunkter</span><span class="ph-meta-tag">24t frist — forhandler ringer</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp1-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">1.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Digital inngang — inspirasjon og MIND-stiler</span>
+            <span class="tp-badge">Nettsted</span>
+          </div>
+        </div>
+        <div class="tp-ans">Vikingbad (nettsted / studio)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Formål</div>
+      <ul class="tp-list"><li>Vekke interesse, gi inspirasjon og gjøre kunden trygg på at det finnes en strukturert prosess for å realisere baderomsdrømmen.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Kunden utforsker stilretninger og ferdige baderomsmiljøer på nett</li><li>Visuell og pedagogisk konseptforklaring av MIND-stiler presenteres</li><li>CTA «Planlegg ditt nye bad» vises tydelig og entydig</li><li>Kunden oppfordres til å booke befaring eller inspirasjonstime</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Kundeopplevelse</div>
+      <ul class="tp-list"><li>Inspirerende og oversiktlig. Kunden opplever at det å pusse opp bad ikke trenger å være komplisert — det finnes en klar og trygg prosess.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Rutiner</div>
+      <ul class="tp-list"><li>Stilmagasin og MIND-stiler er tilgjengelige digitalt</li><li>Konseptforklaring er pedagogisk og visuell — ikke teknisk</li><li>CTA er synlig og entydig</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden booker befaring hos Studio-forhandler eller inspirasjonstime i VB Studio.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp1-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">1.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Book befaring hos Studio-forhandler</span>
+            <span class="tp-badge">Selvbetjening</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forbruker (selvbetjening)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Formål</div>
+      <ul class="tp-list"><li>Konvertere interesse til en konkret avtale. Kunden forplikter seg til neste steg i prosessen.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Kunden velger ønsket Studio-forhandler eller aksepterer nærmeste</li><li>Registreres i OptiMind med Vipps + navn, adresse, telefon og e-post</li><li>Forespørsel om befaring opprettes automatisk og sendes til forhandler</li><li>Kunden får bekreftelse på at forespørsel er mottatt</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Frister</div>
+      <ul class="tp-list"><li class="li-warn">24t — forhandler ringer kunden — absolutt frist</li><li class="li-auto">Auto-påminnelse etter 24t</li><li class="li-warn">48t totalt → rødt flagg til Studio Koordinator</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Forhandler ringer kunden innen 24 timer og avtaler tidspunkt for befaring.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp1-3">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">1.3</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Book inspirasjonstime i VB Studio</span>
+            <span class="tp-badge">Alternativ inngang</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forbruker / VB Studio</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Formål</div>
+      <ul class="tp-list"><li>Gi kunden inspirasjon, forståelse av MIND-stilkonseptene og et tydelig utgangspunkt — før befaring gjennomføres.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Kunden møter Studio og får omvisning i ferdige baderomsmiljøer</li><li>Stilretning og MIND-stil velges med veiledning</li><li>Kunden registreres i OptiMind</li><li>Befaring bookes som neste steg</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Rutiner</div>
+      <ul class="tp-list"><li>Kundesak opprettes og MIND-stil noteres i OptiMind</li><li>Befaring bookes og registreres innen samme dag</li><li class="li-warn">Manglende registrering innen 48t → påminnelse og eskalering</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Befaring avtales og bookes. Kunden er forberedt med stilvalg og prosessforståelse.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-2">
+  <div class="phase-head" style="background:#9D8068">
+    <div class="phase-head-num">2</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 2</div>
+      <h2 class="phase-title">Analog inngang</h2>
+      <p class="phase-desc">Kunden besøker butikk</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">2 kontaktpunkter</span><span class="ph-meta-tag">Tre mulige neste steg</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp2-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">2.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Analog inngang — kunden besøker butikk</span>
+            <span class="tp-badge">Butikk</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer / Studiokoordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Formål</div>
+      <ul class="tp-list"><li>Identifisere kunder med baderomsprosjekt og introdusere Vikingbad Studio som det rette verktøyet.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Designer/Studiokoordinator møter kunden og avklarer om det er et baderomsprosjekt</li><li>Kunden presenteres for Vikingbad Studio-konseptet</li><li>Riktig neste steg vurderes og tilbys</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Tre mulige neste steg</div>
+      <ul class="tp-list"><li>Book inspirasjonstime i Vikingbad Studio</li><li>Book befaring hjemme hos kunden via Studio-forhandler</li><li>Kunden ønsker mer tid — send informasjon og følg opp</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Rutiner</div>
+      <ul class="tp-list"><li>Designer/Studiokoordinator registrerer kunden i OptiMind umiddelbart</li><li>Valgt neste steg bookes og bekreftes i OptiMind</li><li class="li-auto">Kunden mottar automatisk bekreftelse via SMS og e-post</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden booker enten inspirasjonstime i VB Studio eller befaring hos Studio-forhandler.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp2-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">2.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Personlig salgssamtale i butikk</span>
+            <span class="tp-badge">Samtale</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Formål</div>
+      <ul class="tp-list"><li>Avklare kundens prosjekt og behov, og bestemme riktig neste steg i kundereisen.</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Forhandler lytter til kundens ønsker og prosjektbeskrivelse</li><li>Kunden introduseres for Vikingbad Studio-konseptet i dybden</li><li>Riktig neste steg bestemmes: inspirasjonstime i Studio eller befaring hjemme</li><li>Kunden registreres i OptiMind og neste steg bookes umiddelbart</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Kundeopplevelse</div>
+      <ul class="tp-list"><li>Personlig og engasjerende. Kunden skal føle seg hørt og sett — ikke salgspresset.</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden går videre til inspirasjonstime i VB Studio eller befaring hjemme via Studio-forhandler.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-3">
+  <div class="phase-head" style="background:#2A2A2A">
+    <div class="phase-head-num">3</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 3</div>
+      <h2 class="phase-title">Registrering og matching</h2>
+      <p class="phase-desc">Alle kunder inn i OptiMind</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">2 kontaktpunkter</span><span class="ph-meta-tag">Vipps-identifikasjon</span><span class="ph-meta-tag">24t frist</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp3-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">3.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Registrere forbruker i OptiMind</span>
+            <span class="tp-badge">⚡ OptiMind</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler / System</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Krav</div>
+      <ul class="tp-list"><li class="li-warn">Vipps + navn, adresse, telefon, e-post — obligatorisk</li><li class="li-warn">Ingen sak kan opprettes uten komplett registrering</li><li>Kunden kobles til valgt forhandler (eller nærmeste)</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Automatikk</div>
+      <ul class="tp-list"><li class="li-auto">System sender automatisk bekreftelse til kunden</li><li class="li-auto">Forhandler varsles umiddelbart</li><li class="li-auto">Kundesak opprettes automatisk i OptiMind</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Forespørsel om befaring sendes forhandler. Forhandler ringer kunden innen 24 timer.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp3-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">3.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forhandler ringer og avtaler befaring innen 24 timer</span>
+            <span class="tp-badge">Telefon</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Forhandler ringer kunden — senest innen 24 timer</li><li>Introduserer Vikingbad Studio og forklarer prosessen kort</li><li>Avtaler tidspunkt for befaring — hjemme eller i butikk</li><li class="li-warn">Tidspunkt registreres i OptiMind — aldri i kalender eller e-post</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskaleringstrapp</div>
+      <ul class="tp-list"><li class="li-auto">24t → auto-påminnelse til forhandler</li><li class="li-warn">48t totalt → rødt flagg til Studio Koordinator</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Befaring bookes og bekreftes i OptiMind. Forbruker mottar bekreftelse med stilmagasin og brosjyre.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-4">
+  <div class="phase-head" style="background:#9D8068">
+    <div class="phase-head-num">4</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 4</div>
+      <h2 class="phase-title">Før befaring</h2>
+      <p class="phase-desc">Automatiske bekreftelser og påminnelser</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">2 kontaktpunkter</span><span class="ph-meta-tag">⚡ Helautomatisk</span><span class="ph-meta-tag">Påminnelse 24t før</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp4-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">4.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Bekreftelse på befaring sendt til forbruker</span>
+            <span class="tp-badge">⚡ Automatisk</span>
+          </div>
+        </div>
+        <div class="tp-ans">OptiMind (automatisk)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Innhold</div>
+      <ul class="tp-list"><li class="li-auto">SMS og e-post med dato, tidspunkt og hvem som kommer</li><li class="li-auto">Lenke til stilmagasin og Studio-brosjyre</li><li class="li-auto">Forhandler mottar kalenderinnkalling automatisk</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Viktig regel</div>
+      <ul class="tp-list"><li class="li-warn">Forhandler sender aldri egne e-poster utenfor OptiMind</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden forbereder seg. Forhandler forbereder befaringen.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp4-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">4.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Påminnelse om befaring — 24 timer før</span>
+            <span class="tp-badge">⚡ Automatisk</span>
+          </div>
+        </div>
+        <div class="tp-ans">OptiMind (automatisk)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Innhold</div>
+      <ul class="tp-list"><li class="li-auto">SMS og e-post med påminnelse om tidspunkt, sted og hvem</li><li class="li-auto">Forhandler kan se bekreftelsesstatuslogg i OptiMind</li><li class="li-auto">Helautomatisk — 24t før møtet</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Befaring gjennomføres som planlagt.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-5">
+  <div class="phase-head" style="background:#5E6A60">
+    <div class="phase-head-num">5</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 5</div>
+      <h2 class="phase-title">Befaring</h2>
+      <p class="phase-desc">Fundamentet for alt som følger</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">3 kontaktpunkter</span><span class="ph-meta-tag">Lasermåler + bilder</span><span class="ph-meta-tag">Tegnetime MÅ bookes under befaringen</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp5-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">5.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Befaring gjennomføres</span>
+            <span class="tp-badge">Hjemmebesøk / Butikk</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Gjennomføring</div>
+      <ul class="tp-list"><li>Nøyaktige mål tas med lasermåler</li><li>Rommet fotograferes fra alle vinkler</li><li>Rørføringer, sluk og elektriske punkter dokumenteres</li><li>Kundens ønsker, stilpreferanser og budsjett kartlegges</li><li>MIND-stil og varianter velges sammen med kunden</li><li>Videre prosess og tidsplan kommuniseres</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutte krav</div>
+      <ul class="tp-list"><li class="li-warn">Dokumentasjon lastes opp SAME DAG som befaringen</li><li class="li-warn">Tegnetime MÅ bookes under befaringen — ikke etterpå</li><li class="li-warn">Befaring kan IKKE sendes inn uten bekreftet tegnetime</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Befaringsdokumentasjon sendes til Designer via OptiMind. Designer starter forberedelse.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp5-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">5.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Tegnetime bookes som del av befaringen</span>
+            <span class="tp-badge">Absolutt krav</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Tidspunkt for tegnetime avtales mens befaringen avsluttes</li><li>Tegnetime registreres og bekreftes i OptiMind</li><li class="li-auto">Kunden mottar automatisk bekreftelse med forberedelsesinfo</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutte krav</div>
+      <ul class="tp-list"><li class="li-warn">ABSOLUTT: Befaring kan IKKE sendes inn uten bekreftet tegnetime</li><li class="li-warn">Tegnetime bookes alltid på befaringsdagen — aldri i etterkant</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Designer forbereder tegnetimen basert på mottatt befaringsdokumentasjon.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp5-3">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">5.3</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forbruker mottar bekreftelse og forberedelsesinfo til tegnetime</span>
+            <span class="tp-badge">⚡ Automatisk</span>
+          </div>
+        </div>
+        <div class="tp-ans">OptiMind (automatisk)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Innhold</div>
+      <ul class="tp-list"><li class="li-auto">E-post og SMS med dato, sted og hvem som gjennomfører</li><li class="li-auto">Forberedelsesoppgaver: se gjennom inspirasjon, bekreft stilvalg</li><li class="li-auto">Automatisk påminnelse sendes 24 timer før tegnetimen</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hvis kunden ikke forbereder seg</div>
+      <ul class="tp-list"><li class="li-warn">Designer ringer og booker ny tegnetime</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Designer forbereder ferdig løsningsforslag. Forbruker forbereder seg til tegnetimen.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-6">
+  <div class="phase-head" style="background:#5E6A60">
+    <div class="phase-head-num">6</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 6</div>
+      <h2 class="phase-title">Forberedelse og tegnetime</h2>
+      <p class="phase-desc">Designer utarbeider 3D-løsningsforslag</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">2 kontaktpunkter</span><span class="ph-meta-tag">Ferdig 3D-forslag til møtet</span><span class="ph-meta-tag">1 bad = 1 tegning = 1 tilbud</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp6-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">6.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Baderomdesigner forbereder tegnetimen</span>
+            <span class="tp-badge">Designer</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Forberedelsesprosess</div>
+      <ul class="tp-list"><li>Gjennomgår all befaringsdokumentasjon: mål, bilder og notater</li><li>Kontrollerer at dokumentasjonen er komplett</li><li>Utarbeider ferdig 3D-løsningsforslag basert på MIND-stil</li><li>Forbereder alternativ dersom primærønske ikke lar seg løse</li><li>Kvitter sjekkliste for forberedelse i OptiMind</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutt krav</div>
+      <ul class="tp-list"><li class="li-warn">Tegnetime gjennomføres ALDRI uten ferdig forberedt 3D-forslag</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Tegnetime gjennomføres.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp6-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">6.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Tegnetime gjennomføres</span>
+            <span class="tp-badge">Nøkkelmoment</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer (utøver) / Forhandler (kommersielt eierskap)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Gjennomføring</div>
+      <ul class="tp-list"><li>Presenter 3D-løsningsforslaget strukturert og engasjerende</li><li>Gjennomfør nødvendige justeringer i dialog med kunden</li><li>Hvert bad behandles separat ved flere bad</li><li>Konkluder på én endelig tegning per bad</li><li>Forklar videre prosess grundig og overlevér brosjyre til kunden</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutte krav</div>
+      <ul class="tp-list"><li class="li-warn">1 BAD = 1 TILBUD — aldri opprette flere tilbud på samme bad</li><li class="li-warn">Aldri opprette «ekstra bad» for parallelle alternativer</li><li class="li-warn">Forbruker mottar KUN 3D-tegninger og produktpakkepris — aldri enkeltpriser</li></ul>
+    </div>
+    <div class="tp-sec">
+      <div class="tp-sec-label">Automatikk</div>
+      <ul class="tp-list"><li class="li-auto">OptiMind genererer oppsummering med 3D og produktpakkepris til kunden</li><li class="li-auto">Saken sendes automatisk til forhandler — 48-timersfristen begynner nå</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Tilbud genereres og sendes via OptiMind til forbruker og forhandler.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-7">
+  <div class="phase-head" style="background:#2A2A2A">
+    <div class="phase-head-num">7</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 7</div>
+      <h2 class="phase-title">Etter tegnetime og tilbud</h2>
+      <p class="phase-desc">Fra tegning til totaltilbud på 48 timer</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">4 kontaktpunkter</span><span class="ph-meta-tag">48t absolutt frist</span><span class="ph-meta-tag">Kun samlet produktpakkepris</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp7-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">7.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forbruker mottar oppsummering, 3D-tegning og produktpakkepris</span>
+            <span class="tp-badge">⚡ Automatisk</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer / OptiMind (automatisk)</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Innhold</div>
+      <ul class="tp-list"><li class="li-auto">Endelig tegning lagres og 3D-visualisering genereres</li><li class="li-auto">Produktliste og veiledende produktpakkepris beregnes</li><li class="li-auto">Info om at totaltilbud sendes innen 48 timer</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutt krav</div>
+      <ul class="tp-list"><li class="li-warn">Forbruker mottar KUN samlet produktpakkepris — aldri enkeltpriser</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Komplett totaltilbud sendes fra Studio-forhandler innen 48 timer.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp7-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">7.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forhandler mottar sak — tilbudsarbeid starter</span>
+            <span class="tp-badge">Forhandler</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer / Studio-forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li class="li-auto">Forhandler mottar automatisk varsel fra OptiMind</li><li>Ansvarlig person tildeles saken</li><li>Tegning og produktliste gjennomgås nøye</li><li class="li-warn">48-timersfristen starter i det øyeblikket saken mottas</li><li class="li-warn">1 bad = 1 tilbud — ingen parallellstruktur</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Komplett totaltilbud sendes til forbruker via OptiMind innen 48 timer.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp7-3">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">7.3</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forhandler sender komplett totaltilbud innen 48 timer</span>
+            <span class="tp-badge">Forhandler</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Gjennomgår tegning og produktliste fra Designer</li><li>Kalkulerer montasje og installasjonstjenester</li><li>Legger til alle tilleggstjenester og gjennomføringskostnader</li><li>Kvalitetssikrer at tilbudet er fullstendig og korrekt</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutte krav</div>
+      <ul class="tp-list"><li class="li-warn">Sender totaltilbud via OptiMind — ALDRI via direkte e-post</li><li class="li-warn">Kunden skal ALDRI motta enkeltproduktpriser</li><li class="li-auto">48t frist — rødt flagg til Studio Ansvarlig ved brudd</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Forbruker mottar tilbud. Forhandler ringer for oppfølgingssamtale innen 2–3 virkedager.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp7-4">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">7.4</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Designer følger opp sluttkunden om forhandler ikke åpner sak innen 48t</span>
+            <span class="tp-badge">Absolutt krav</span>
+          </div>
+        </div>
+        <div class="tp-ans">Designer</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li class="li-auto">OptiMind varsler Designer ved 48t-brudd</li><li class="li-warn">Varsle Studiokoordinator umiddelbart</li><li>Ring sluttkunden og bekreft at løsningen er ferdig og klar</li><li>Forsikre kunden om at totaltilbud er på vei fra forhandler</li><li class="li-warn">Overta IKKE tilbudsarbeidet — trygge kunden er din rolle</li><li>Logg samtalen i OptiMind</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Studiokoordinator følger opp forhandler parallelt.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-8">
+  <div class="phase-head" style="background:#9D8068">
+    <div class="phase-head-num">8</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 8</div>
+      <h2 class="phase-title">Tilbudsoppfølging og beslutning</h2>
+      <p class="phase-desc">Ingen sak skal ligge passivt</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">4 kontaktpunkter</span><span class="ph-meta-tag">5 dagers regel</span><span class="ph-meta-tag">KTI ved aksept</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp8-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">8.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forbruker mottar og åpner tilbud</span>
+            <span class="tp-badge">⚡ Sporbar</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forbruker / Forhandler</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Automatikk</div>
+      <ul class="tp-list"><li class="li-auto">Systemet registrerer åpningstidspunkt automatisk</li><li class="li-auto">Forhandler varsles øyeblikkelig når tilbudet åpnes</li><li class="li-auto">Tilbud ikke åpnet innen 48t → automatisk påminnelse til forbruker</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutte krav</div>
+      <ul class="tp-list"><li class="li-warn">Forhandler ringer kunden innen 2–3 virkedager etter åpning</li><li class="li-warn">Forhandler ikke fulgt opp etter +24t → rødt flagg til Studio Koordinator</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Forhandler og forbruker gjennomgår tilbud. Kunden beveger seg mot en beslutning.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp8-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">8.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forbruker har ikke respondert innen 5 dager</span>
+            <span class="tp-badge">⚡ Auto + koordinator</span>
+          </div>
+        </div>
+        <div class="tp-ans">OptiMind / Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskaleringstrapp</div>
+      <ul class="tp-list"><li class="li-auto">5 dager → automatisk påminnelse til forbruker</li><li class="li-warn">Rødt flagg varsles til Studio Koordinator</li><li>Studio Koordinator kontakter forhandler for avklaring</li><li class="li-warn">Ingen tilbud skal bli liggende passivt</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden responderer — med spørsmål, justering, aksept eller avslag.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp8-3">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">8.3</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Tilbud aksepteres — beslutning og KTI-oppfølging</span>
+            <span class="tp-badge">✓ Aksept</span>
+          </div>
+        </div>
+        <div class="tp-ans">Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Forhandler registrerer aksepten i OptiMind</li><li class="li-auto">Ordrebekreftelse sendes automatisk til kunden</li><li>Leveringstidspunkt avklares og håndverker koordineres</li></ul>
+    </div>
+    <div class="tp-sec  tp-sec-warn">
+      <div class="tp-sec-label">Absolutt krav</div>
+      <ul class="tp-list"><li class="li-warn">KTI-undersøkelse gjennomføres av Studio Koordinator — ALDRI av forhandler</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Gjennomføring starter. Kunden koordineres med håndverker for montering.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp8-4">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">8.4</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Tilbud avslås — avslags- og innsiktsoppfølging</span>
+            <span class="tp-badge">↺ Avslagsprotokoll</span>
+          </div>
+        </div>
+        <div class="tp-ans">Forhandler / Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Hva skal skje</div>
+      <ul class="tp-list"><li>Forhandler registrerer avslaget og årsak i OptiMind</li><li>Studio Koordinator følger opp kunden for å forstå årsaken</li><li>Innsikten deles med Studio Leder i statusmøter</li><li>Timing-avslag → reaktivering settes i OptiMind</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Innsikt brukes i neste statusmøte. Kunde kan reaktiveres ved et senere tidspunkt.</div>
+      </div>
+    </div>
+</div></section>
+
+<section class="phase reveal" id="phase-9">
+  <div class="phase-head" style="background:#A32020">
+    <div class="phase-head-num">9</div>
+    <div class="phase-head-body">
+      <div class="phase-eyebrow">Fase 9</div>
+      <h2 class="phase-title">Eskalering og røde flagg</h2>
+      <p class="phase-desc">Sikkerhetsnett for hele prosessen</p>
+    </div>
+  </div>
+  <div class="phase-meta"><span class="ph-meta-tag">4 røde flagg</span><span class="ph-meta-tag">⚡ Systemgenerert varsling</span><span class="ph-meta-tag">Brudd logges for partneroppfølging</span></div>
+  <div class="phase-tps">
+
+    <div class="tp reveal" id="tp9-1">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">9.1</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forhandler har ikke ringt innen 24 timer</span>
+            <span class="tp-badge">🔴 Rødt flagg</span>
+          </div>
+        </div>
+        <div class="tp-ans">Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskalering</div>
+      <ul class="tp-list"><li class="li-auto">24t → auto-påminnelse til forhandler</li><li class="li-warn">48t → rødt flagg til Studio Koordinator</li><li class="li-warn">Studio Koordinator kontakter forhandler same arbeidsdag og setter ny frist</li><li>Gjentatte brudd registreres og behandles i partneroppfølging</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Forhandler tar kontakt. Befaring avtales og registreres.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp9-2">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">9.2</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Befaringsdokumentasjon ikke lastet opp innen fristen</span>
+            <span class="tp-badge">🔴 Rødt flagg</span>
+          </div>
+        </div>
+        <div class="tp-ans">Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskaleringstrapp</div>
+      <ul class="tp-list"><li>Norm: opplasting same dag</li><li class="li-auto">24t → auto-påminnelse til forhandler</li><li class="li-warn">48t → rødt flagg til Studio Koordinator</li><li class="li-warn">Tegnetime kan IKKE gjennomføres uten komplett dokumentasjon</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Dokumentasjon lastes opp. Designer starter forberedelse.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp9-3">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">9.3</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Forhandler har ikke sendt totaltilbud innen 48 timer</span>
+            <span class="tp-badge">🔴 Rødt flagg</span>
+          </div>
+        </div>
+        <div class="tp-ans">Studio Ansvarlig (Grimstad) / Studio Leder</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskalering</div>
+      <ul class="tp-list"><li class="li-auto">OptiMind registrerer automatisk at 48t er passert</li><li class="li-warn">Rødt flagg og varsel sendes til Studio Ansvarlig (Grimstad)</li><li class="li-warn">Studio Ansvarlig gjennomgår saken og kontakter forhandler same arbeidsdag</li><li class="li-warn">Gjentatte brudd registreres og kan påvirke partnerstatus</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Totaltilbud sendes. Systematisk brudd → vurdering av partnerstatus.</div>
+      </div>
+    </div>
+
+    <div class="tp reveal" id="tp9-4">
+      <button class="tp-toggle" onclick="toggleTp(this)">
+        <div class="tp-toggle-left">
+          <span class="tp-num">9.4</span>
+          <div class="tp-toggle-text">
+            <span class="tp-title">Tilbud ikke åpnet innen 48t / Forhandler ikke fulgt opp</span>
+            <span class="tp-badge">🔴 Rødt flagg</span>
+          </div>
+        </div>
+        <div class="tp-ans">Studio Koordinator</div>
+        <span class="tp-chev">▾</span>
+      </button>
+      <div class="tp-body">
+        
+    <div class="tp-sec">
+      <div class="tp-sec-label">Eskalering</div>
+      <ul class="tp-list"><li class="li-auto">48t uten åpning → automatisk påminnelse til forbruker</li><li class="li-warn">Forhandler varsles og følger opp kunden innen 24 timer</li><li class="li-warn">Manglende oppfølging → rødt flagg til Studio Koordinator</li><li>Studio Koordinator tar ansvar og loggfører all oppfølging</li></ul>
+    </div>
+        <div class="tp-neste"><span class="tp-neste-arrow">→</span>Kunden åpner tilbudet og starter beslutningsprosessen.</div>
+      </div>
+    </div>
+</div></section>
+  </main>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     MOD 2: RUTINER
+════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-rutiner">
+
+  <header class="hero">
+    <div>
+      <div class="hero-logo">
+        <img src="https://www.vikingbad.no/wp-content/uploads/2025/01/Vikingbad-logo-hvit-RGB.svg" alt="Vikingbad"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="hero-kicker">Vikingbad Studio · Rutiner</div>
+      <h1 class="hero-title">Klare rutiner for<br><em>alle roller</em></h1>
+      <p class="hero-sub">Steg-for-steg-rutiner for Forhandler, Designer og Studiokoordinator — konsistent med kundereisen.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="n">9</span><span class="l">Forhandler-steg</span></div>
+      <div class="hero-stat"><span class="n">4</span><span class="l">Designer-steg</span></div>
+      <div class="hero-stat"><span class="n">7</span><span class="l">Koordinator-steg</span></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="role-tabs-bar">
+      <button class="role-tab tab-forhandler active" onclick="switchRole('forhandler',this)">Forhandler</button>
+      <button class="role-tab tab-designer" onclick="switchRole('designer',this)">Designer</button>
+      <button class="role-tab tab-koordinator" onclick="switchRole('koordinator',this)">Studiokoordinator</button>
+    </div>
+
+    <div class="role-panel active" data-role="forhandler">
+      
+<div class="role-intro reveal">
+  <p class="role-desc">Du er kundens primære kontaktpunkt gjennom hele prosessen — fra første telefonsamtale til akseptert tilbud.</p>
+  <ul class="role-regler"><li class="regel-auto">Alt registreres i OptiMind — aldri i kalender, e-post eller egne systemer</li><li class="">Ring kunden innen 24 timer etter mottatt forespørsel</li><li class="">Last opp befaringsdokumentasjon samme dag som befaring</li><li class="">Book tegnetime under befaringen — ikke etterpå</li><li class="">Send totaltilbud innen 48 timer etter mottatt sak fra tegnetime</li></ul>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-1">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">1</span>
+      <div>
+        <span class="step-title">Ta imot og ring kunden innen 24 timer</span>
+        <span class="step-badge step-badge-forhandler">24t frist</span>
+      </div>
+    </div>
+    <div class="step-trigger">Befaringsforespørsel mottatt i OptiMind</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Forbered samtalen</div>
+          <ul class="step-list"><li>Åpne OptiMind og les gjennom kundens forespørsel</li><li>Sjekk at kontaktinfo er komplett: navn, telefon, adresse og e-post</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Gjennomfør samtalen</div>
+          <ul class="step-list"><li>Presenter deg selv og Vikingbad Studio</li><li>Gi en kort forklaring av prosessen: befaring → tegnetime → tilbud → ferdig bad</li><li>Avklar om kunden ønsker befaring hjemme eller i butikk</li><li>Avtal konkret dato og tidspunkt</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Registrer dato og tidspunkt i OptiMind — aldri i kalender eller e-post</li><li class="li-warn">Send IKKE egne SMS eller e-poster utenfor OptiMind</li><li class="li-auto">OptiMind sender automatisk bekreftelse til kunden</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Befaring registrert og bekreftet i OptiMind. Kunden mottar automatisk bekreftelse.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-2">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">2</span>
+      <div>
+        <span class="step-title">Møt kunden i butikk og book neste steg</span>
+        <span class="step-badge step-badge-forhandler">Butikkbesøk</span>
+      </div>
+    </div>
+    <div class="step-trigger">Kunde er innom butikk og har et baderomsprosjekt</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Avklar om de har et baderomsprosjekt og presenter Vikingbad Studio</li><li>Registrer kunden i OptiMind umiddelbart</li><li>Tilby ett av tre neste steg basert på kundens situasjon</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Tre mulige neste steg</div>
+          <ul class="step-list"><li>Book inspirasjonstime i Vikingbad Studio</li><li>Book befaring hjemme hos kunden</li><li>Kunden vil tenke — send informasjon og følg opp</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Alt bookes og logges i OptiMind same dag</li><li class="li-auto">Kunden mottar automatisk bekreftelse</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Inspirasjonstime eller befaring bookes og bekreftes i OptiMind.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-3">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">3</span>
+      <div>
+        <span class="step-title">Gjennomfør befaring hos kunden</span>
+        <span class="step-badge step-badge-forhandler">Nøkkelmoment</span>
+      </div>
+    </div>
+    <div class="step-trigger">Bekreftet befaringstidspunkt i OptiMind</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Teknisk kartlegging</div>
+          <ul class="step-list"><li>Les gjennom kundekortet i OptiMind på forhånd</li><li>Ta nøyaktige mål av rommet med lasermåler</li><li>Fotografer rommet grundig fra alle vinkler</li><li>Dokumenter rørføringer, sluk og elektriske punkter</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Kundesamtalen</div>
+          <ul class="step-list"><li>Kartlegg kundens ønsker, stilpreferanser og budsjett</li><li>Velg MIND-stil og varianter sammen med kunden</li><li>Forklar hva som skjer videre: tegnetime og totaltilbud</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Book tegnetime FØR du forlater kunden</li><li class="li-warn">Last opp all dokumentasjon SAME DAG</li><li class="li-warn">Befaring kan IKKE sendes inn uten bekreftet tegnetime</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Gå direkte til steg 4 — book tegnetime før du forlater kunden.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-4">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">4</span>
+      <div>
+        <span class="step-title">Book tegnetime mens du fortsatt er hos kunden</span>
+        <span class="step-badge step-badge-forhandler">Absolutt krav</span>
+      </div>
+    </div>
+    <div class="step-trigger">Befaringen avsluttes — gjøres på stedet</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Åpne OptiMind og finn tilgjengelig tid for tegnetime</li><li>Avtal dato og tidspunkt med kunden ansikt til ansikt</li><li>Registrer og bekreft tegnetimen i OptiMind før du forlater stedet</li><li class="li-auto">Kunden mottar automatisk bekreftelse og forberedelsesinfo</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Befaring blokkerer innsending i OptiMind uten bekreftet tegnetime</li><li class="li-warn">Book aldri tegnetime i etterkant via telefon eller e-post</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Last opp all befaringsdokumentasjon i OptiMind same dag.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-5">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">5</span>
+      <div>
+        <span class="step-title">Last opp befaringsdokumentasjon i OptiMind — same dag</span>
+        <span class="step-badge step-badge-forhandler">Tidsfrist</span>
+      </div>
+    </div>
+    <div class="step-trigger">Befaring gjennomført — gjøres same dag</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal lastes opp</div>
+          <ul class="step-list"><li>Alle mål fra lasermåler</li><li>Bilder av rommet fra alle vinkler</li><li>Rørføringer, sluk og elektriske punkter</li><li>Kundens ønsker, valgt MIND-stil og budsjett</li><li>Eventuelle tekniske begrensninger</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Eskaleringstrapp</div>
+          <ul class="step-list"><li>Norm: opplasting same dag</li><li class="li-auto">24t → auto-påminnelse til deg</li><li class="li-warn">48t → rødt flagg til Studio Koordinator</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Designer mottar saken og starter forberedelse av 3D-løsningsforslag.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-6">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">6</span>
+      <div>
+        <span class="step-title">Åpne sak fra tegnetime og send totaltilbud innen 48 timer</span>
+        <span class="step-badge step-badge-forhandler">48t frist</span>
+      </div>
+    </div>
+    <div class="step-trigger">Varsel fra OptiMind etter gjennomført tegnetime</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Åpne og gjennomgå</div>
+          <ul class="step-list"><li class="li-warn">Åpne saken i OptiMind umiddelbart — 48-timersfristen starter nå</li><li>Gjennomgå tegning og produktliste nøye</li><li>Avklar uklarheter raskt med Designer via OptiMind</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Kalkylér og send</div>
+          <ul class="step-list"><li>Kalkuler montasje og installasjon</li><li>Legg til alle tilleggstjenester og kostnader</li><li>Kvalitetssikre at tilbudet er komplett og korrekt</li><li class="li-auto">Kunden varsles automatisk om at tilbud er tilgjengelig</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">1 bad = 1 tilbud — opprett aldri flere tilbud på samme bad</li><li class="li-warn">Kunden skal aldri motta enkeltproduktpriser — kun samlet produktpakkepris</li><li class="li-warn">Send alltid via OptiMind — aldri via direkte e-post</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Kunden mottar tilbud. Gå til steg 7.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-7">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">7</span>
+      <div>
+        <span class="step-title">Ring kunden 2–3 virkedager etter utsendt tilbud</span>
+        <span class="step-badge step-badge-forhandler">Oppfølging</span>
+      </div>
+    </div>
+    <div class="step-trigger">Tilbud sendt — ring innen 2–3 virkedager</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Ring kunden innen 2–3 virkedager etter at tilbud er sendt</li><li>Spør om de har sett tilbudet og om det er spørsmål</li><li>Avklar status: aksept, justeringsbehov, mer tid eller avslag</li><li>Logg samtalen og utfallet i OptiMind</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Kunden beveger seg mot en beslutning.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-8">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">8</span>
+      <div>
+        <span class="step-title">Registrer aksept og igangsett gjennomføring</span>
+        <span class="step-badge step-badge-forhandler">✓ Aksept</span>
+      </div>
+    </div>
+    <div class="step-trigger">Kunde bekrefter aksept</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Registrer aksepten i OptiMind umiddelbart</li><li class="li-auto">OptiMind sender automatisk ordrebekreftelse til kunden</li><li>Avklar leveringstidspunkt og koordiner håndverker</li><li class="li-warn">KTI-undersøkelse gjennomføres av Studiokoordinator — ikke av deg</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Gjennomføring starter. Studio Koordinator gjennomfører KTI-undersøkelse.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-forhandler-9">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">9</span>
+      <div>
+        <span class="step-title">Registrer avslag og årsak</span>
+        <span class="step-badge step-badge-forhandler">↺ Avslag</span>
+      </div>
+    </div>
+    <div class="step-trigger">Kunde avslår tilbud</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Ta avslaget med respekt — ingen press</li><li>Prøv å forstå årsaken: pris, timing, konkurrent, annet?</li><li>Registrer avslaget og årsak i OptiMind umiddelbart</li><li class="li-warn">Marker tydelig dersom avslaget skyldes timing — reaktivering kan settes</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Studio Koordinator eier avslagsoppfølgingen. Innsikt deles med Studio Leder.</div>
+  </div>
+</div>
+    </div>
+    <div class="role-panel" data-role="designer">
+      
+<div class="role-intro reveal">
+  <p class="role-desc">Du er det faglige ankerpunktet i hvert prosjekt — din forberedelse og gjennomføring av tegnetimen avgjør kvaliteten på hele leveransen.</p>
+  <ul class="role-regler"><li class="">Tegnetimen starter alltid med et ferdig forberedt 3D-forslag</li><li class="">1 bad = 1 tegning = 1 tilbud — ingen parallellstrukturer</li><li class="">Kontakt sluttkunde direkte hvis forhandler ikke åpner sak innen 48 timer</li><li class="regel-auto">Alt loggføres i OptiMind — ingen manuelle kommunikasjonskanaler</li></ul>
+</div>
+
+<div class="ru-step reveal" id="ru-designer-1">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">1</span>
+      <div>
+        <span class="step-title">Gjennomfør inspirasjonstime i Vikingbad Studio</span>
+        <span class="step-badge step-badge-designer">Studio</span>
+      </div>
+    </div>
+    <div class="step-trigger">Kunden har booket inspirasjonstime</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Ta imot kunden og gi guidet omvisning i showroom</li><li>Vis frem de fem MIND-stilene og hva som skiller dem</li><li>Hjelp kunden å velge stilretning og varianter</li><li>Avklar budsjett, romstørrelse og eventuelle ønsker</li><li>Registrer kunden og valgt MIND-stil i OptiMind</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Book befaring som neste steg — same dag som inspirasjonstimen</li><li class="li-warn">Manglende registrering innen 48t utløser påminnelse og eskalering</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Befaring bookes. Kunden er forberedt med stilvalg og prosessforståelse.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-designer-2">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">2</span>
+      <div>
+        <span class="step-title">Forbered tegnetimen — utarbeid ferdig 3D-løsningsforslag</span>
+        <span class="step-badge step-badge-designer">Nøkkelmoment</span>
+      </div>
+    </div>
+    <div class="step-trigger">Befaringsdokumentasjon lastet opp i OptiMind</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Gjennomgå dokumentasjon</div>
+          <ul class="step-list"><li>Gjennomgå all befaringsdokumentasjon: mål, bilder og notater</li><li>Kontroller at dokumentasjonen er komplett</li><li class="li-warn">Er dokumentasjonen mangelfull? Kontakt forhandler via OptiMind FØR du starter</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Utarbeid løsningsforslaget</div>
+          <ul class="step-list"><li>Utarbeid ferdig 3D-løsningsforslag basert på valgt MIND-stil og kundens ønsker</li><li>Forbered alltid ett alternativ dersom primærønske ikke lar seg løse</li><li>Forbered produktliste knyttet til løsningsforslaget</li><li class="li-warn">Kvitter sjekkliste for forberedelse i OptiMind</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutt krav</div>
+          <ul class="step-list"><li class="li-warn">Tegnetime gjennomføres ALDRI uten ferdig forberedt 3D-forslag</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Ferdig forberedt 3D-forslag klart. Gå til tegnetime.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-designer-3">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">3</span>
+      <div>
+        <span class="step-title">Gjennomfør tegnetime — presenter, juster og konkluder</span>
+        <span class="step-badge step-badge-designer">Beslutningsmoment</span>
+      </div>
+    </div>
+    <div class="step-trigger">Bekreftet tegnetime</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Gjennomføring</div>
+          <ul class="step-list"><li>Ønsker kunden velkommen og sett en trygg, strukturert ramme</li><li>Presenter det ferdige 3D-løsningsforslaget strukturert</li><li>Gjennomfør justeringer i dialog med kunden</li><li>Hvert bad behandles separat og konkluderes individuelt</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutte krav</div>
+          <ul class="step-list"><li class="li-warn">Konkluder på én endelig tegning per bad — aldri åpne alternativer</li><li class="li-warn">1 bad = 1 registrert sakenhet i OptiMind</li><li class="li-warn">Forklar videre prosess grundig — kunden skal forlate møtet med full forståelse</li><li class="li-warn">Overlevér brosjyre om videre prosess til kunden</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Automatikk</div>
+          <ul class="step-list"><li class="li-auto">OptiMind genererer automatisk oppsummering og sender til kunden</li><li class="li-auto">Saken sendes til forhandler — 48-timersfristen begynner nå</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Tegning konkludert. OptiMind sender oppsummering med 3D og produktpakkepris til kunden.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-designer-4">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">4</span>
+      <div>
+        <span class="step-title">Kontakt sluttkunden direkte om forhandler ikke åpner sak innen 48t</span>
+        <span class="step-badge step-badge-designer">Absolutt krav</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler om at forhandler ikke har åpnet saken innen 48 timer</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Hva skal skje</div>
+          <ul class="step-list"><li>Sjekk OptiMind og bekreft at forhandler faktisk ikke har åpnet saken</li><li class="li-warn">Varsle Studiokoordinator umiddelbart</li><li>Ring sluttkunden og presenter deg som ansvarlig designer</li><li>Bekreft at tegning og løsning er ferdig og klar</li><li>Forsikre kunden om at totaltilbudet er på vei fra forhandler</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Din rolle og din grense</div>
+          <ul class="step-list"><li class="li-warn">Du overtar IKKE tilbudsarbeidet — trygge kunden er ditt ansvar</li><li class="li-warn">Logg samtalen i OptiMind slik at Studiokoordinator har full oversikt</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Studiokoordinator følger opp forhandler. Forhandler ferdigstiller totaltilbud.</div>
+  </div>
+</div>
+    </div>
+    <div class="role-panel" data-role="koordinator">
+      
+<div class="role-intro reveal">
+  <p class="role-desc">Du er Vikingbads kvalitetsvakt — du sikrer at frister overholdes, eskaleringer håndteres og kunden aldri opplever stillhet.</p>
+  <ul class="role-regler"><li class="">Håndter alle røde flagg fra OptiMind same arbeidsdag</li><li class="">Gjennomfør KTI-undersøkelse ved aksept — aldri forhandler</li><li class="regel-auto">Eier avslagsoppfølging og reaktivering av timing-kunder</li><li class="">Alle brudd registreres og behandles i kvartalsvis partneroppfølging</li></ul>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-rf1">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">RF1</span>
+      <div>
+        <span class="step-title">Forhandler har ikke ringt kunden innen 48 timer</span>
+        <span class="step-badge step-badge-koordinator">🔴 Rødt flagg</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler etter 48t uten registrert kontakt fra forhandler</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Handle same arbeidsdag</div>
+          <ul class="step-list"><li class="li-warn">Gjennomgå saken i OptiMind</li><li class="li-warn">Kontakt forhandler umiddelbart — krev forklaring og sett ny konkret frist</li><li>Logg forklaring og ny tidslinje i OptiMind</li><li>Sjekk om kunden har tatt kontakt med Vikingbad direkte</li><li>Ring kunden dersom nødvendig — beklager og sikrer befaring</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Ved gjentatte brudd</div>
+          <ul class="step-list"><li class="li-warn">Registrer avvik på partner i OptiMind</li><li>Ta opp i neste partneroppfølgingsmøte</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Forhandler tar kontakt. Befaring avtales og registreres.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-rf2">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">RF2</span>
+      <div>
+        <span class="step-title">Befaringsdokumentasjon ikke lastet opp innen fristen</span>
+        <span class="step-badge step-badge-koordinator">🔴 Rødt flagg</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler etter 48t uten opplastet dokumentasjon</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Handle umiddelbart</div>
+          <ul class="step-list"><li class="li-warn">Kontakt forhandler umiddelbart — krev rask opplasting</li><li>Avklar om tegnetime må utsettes — koordiner med Designer</li><li>Informer kunden dersom tegnetime utsettes — gi ny dato</li><li>Logg all håndtering i OptiMind</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Dokumentasjon lastes opp. Designer starter forberedelse til tegnetime.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-rf3">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">RF3</span>
+      <div>
+        <span class="step-title">Forhandler har ikke sendt totaltilbud innen 48 timer</span>
+        <span class="step-badge step-badge-koordinator">🔴 Rødt flagg</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler — eskalerer til Studio Ansvarlig (Grimstad)</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Handle same arbeidsdag</div>
+          <ul class="step-list"><li class="li-warn">Gjennomgå saken umiddelbart</li><li class="li-warn">Kontakt forhandler — krev forklaring og sett ny konkret frist</li><li>Oppdater status i OptiMind</li><li>Kontakt kunden dersom forsinkelsen er merkbar — beklager og gir ny dato</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Ved gjentatte brudd</div>
+          <ul class="step-list"><li class="li-warn">Avvik registreres på partner</li><li class="li-warn">Vurderes kvartalsvis — kan påvirke partnerstatus</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Totaltilbud sendes. Gjentatte brudd → vurdering av partnerstatus.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-rf4">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">RF4</span>
+      <div>
+        <span class="step-title">Tilbud ikke åpnet / Forhandler ikke fulgt opp</span>
+        <span class="step-badge step-badge-koordinator">🔴 Rødt flagg</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler — forbruker passiv eller forhandler ikke fulgt opp</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Handle umiddelbart</div>
+          <ul class="step-list"><li>Sjekk saken i OptiMind — har forhandler fått varselet?</li><li class="li-warn">Kontakt forhandler — krev oppfølging av kunden innen 24 timer</li><li>Hvis forhandler ikke følger opp: kontakt kunden direkte</li><li>Loggfør all oppfølging i OptiMind med dato og resultat</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Kunden åpner tilbudet og starter beslutningsprosessen.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-rf5">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">RF5</span>
+      <div>
+        <span class="step-title">Forbruker har ikke respondert på tilbud innen 5 dager</span>
+        <span class="step-badge step-badge-koordinator">🔴 Rødt flagg</span>
+      </div>
+    </div>
+    <div class="step-trigger">OptiMind varsler etter 5 dager uten respons</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Handle umiddelbart</div>
+          <ul class="step-list"><li>Kontakt forhandler og avklar situasjon</li><li>Bestem neste steg i samråd med forhandler</li><li>Forhandler kontakter kunden direkte dersom automatisk påminnelse ikke gir respons</li><li>Logg alle tiltak og utfall i OptiMind</li><li class="li-warn">5-dagersregelen er absolutt — ingen tilbud skal bli liggende passivt</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Kunden responderer med spørsmål, justering, aksept eller avslag.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-6">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">6</span>
+      <div>
+        <span class="step-title">Gjennomfør KTI-undersøkelse når tilbud aksepteres</span>
+        <span class="step-badge step-badge-koordinator">KTI</span>
+      </div>
+    </div>
+    <div class="step-trigger">Forhandler registrerer aksept i OptiMind</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Gjennomføring</div>
+          <ul class="step-list"><li class="li-warn">Ring kunden innen 1–2 dager etter aksept</li><li>Gjennomfør undersøkelsen strukturert: helhetsbilde, prosess, forhandler og designer</li><li>Loggfør alle svar strukturert i OptiMind</li><li>Del innsikt med Studio Leder i statusmøte</li></ul>
+        </div>
+        <div class="step-sec  step-sec-warn">
+          <div class="step-sec-label">Absolutt krav</div>
+          <ul class="step-list"><li class="li-warn">KTI gjennomføres ALLTID av Studiokoordinator — aldri av forhandler</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Gjennomføring starter. Innsikt brukes aktivt i utvikling av prosessen.</div>
+  </div>
+</div>
+
+<div class="ru-step reveal" id="ru-koordinator-7">
+  <button class="step-toggle" onclick="toggleStep(this)">
+    <div class="step-toggle-left">
+      <span class="step-num">7</span>
+      <div>
+        <span class="step-title">Følg opp avslag — kartlegg årsak og sett reaktivering</span>
+        <span class="step-badge step-badge-koordinator">↺ Avslag</span>
+      </div>
+    </div>
+    <div class="step-trigger">Forhandler registrerer avslag i OptiMind</div>
+    <span class="step-chev">▾</span>
+  </button>
+  <div class="step-body">
+    
+        <div class="step-sec">
+          <div class="step-sec-label">Gjennomføring</div>
+          <ul class="step-list"><li>Ta kontakt med kunden for å forstå den reelle årsaken</li><li>Kartlegg: pris, timing, konkurrent, prosessopplevelse eller annet?</li><li>Håndter avslaget med respekt — kunden skal sitte igjen med godt inntrykk</li><li>Logg årsak strukturert i OptiMind</li><li>Sett reaktivering dersom avslaget skyldes timing</li></ul>
+        </div>
+        <div class="step-sec">
+          <div class="step-sec-label">Din rolle</div>
+          <ul class="step-list"><li class="li-warn">Du eier avslagsoppfølgingen — forhandler registrerer</li><li>Del innsikt med Studio Leder kvartalsvis</li></ul>
+        </div>
+    <div class="step-neste"><span>→</span>Innsikt brukes i neste statusmøte. Kunde reaktiveres ved riktig tidspunkt.</div>
+  </div>
+</div>
+    </div>
+  </main>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     MOD 3: SJEKKLISTER
+════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-sjekklister">
+
+  <header class="hero">
+    <div>
+      <div class="hero-logo">
+        <img src="https://www.vikingbad.no/wp-content/uploads/2025/01/Vikingbad-logo-hvit-RGB.svg" alt="Vikingbad"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="hero-kicker">Vikingbad Studio · Sjekklister</div>
+      <h1 class="hero-title">Gjør det riktig<br><em>hver gang</em></h1>
+      <p class="hero-sub">Interaktive sjekklister for alle tre roller — kryss av hvert punkt etter hvert som du gjennomfører det.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="n">!</span><span class="l">Absolutt krav</span></div>
+      <div class="hero-stat"><span class="n">⚡</span><span class="l">Automatisk</span></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="role-tabs-bar">
+      <button class="role-tab tab-forhandler active" onclick="switchCkRole('forhandler',this)">Forhandler</button>
+      <button class="role-tab tab-designer" onclick="switchCkRole('designer',this)">Designer</button>
+      <button class="role-tab tab-koordinator" onclick="switchCkRole('koordinator',this)">Studiokoordinator</button>
+    </div>
+
+    <div class="role-panel active" data-role="forhandler">
+      
+<div class="ck-section reveal" id="fcl-1">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Motta forespørsel og ring kunden</span>
+      <span class="ck-head-sub">Gjøres innen 24 timer etter mottatt forespørsel i OptiMind</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-orange">24t frist</span>
+      <span class="ck-progress-text" id="fcl-1-count">0 / 10</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="fcl-1-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Sjekk OptiMind og forbered samtalen</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Åpne OptiMind og les gjennom kundens forespørsel og registrerte informasjon</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk at kundens kontaktinformasjon er komplett: navn, telefon, adresse og e-post</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gjør deg kjent med eventuell stilpreferanse eller ønsker kunden har angitt</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Gjennomfør telefonsamtalen</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Presenter deg selv og forklar at du ringer fra Vikingbad Studio</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gi en kort forklaring av prosessen: befaring → tegnetime → tilbud → ferdig bad</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar om kunden ønsker befaring hjemme eller i butikk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avtal konkret dato og tidspunkt for befaring</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Registrer i OptiMind</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer dato og tidspunkt for befaring i OptiMind — ikke i kalender eller e-post</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind sender automatisk bekreftelse til kunden via SMS og e-post</span>
+              <div class="ck-note">Automatisk — ingen manuell handling nødvendig</div>
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Send IKKE egne SMS eller e-poster utenfor OptiMind</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="fcl-1-summary" class="ck-summary-text">0 av 10 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'fcl-1',10)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="fcl-2">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Møt kunden i butikk og book neste steg</span>
+      <span class="ck-head-sub">Gjelder for kunder som kommer innom uten forhåndsavtale</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-brun">Butikk</span>
+      <span class="ck-progress-text" id="fcl-2-count">0 / 7</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="fcl-2-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Avklar situasjonen</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta imot kunden imøtekommende og avklar om de har et pågående baderomsprosjekt</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Lytt til kundens situasjon: renovering, nybygg, idéfase eller klar for handling?</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Presenter Vikingbad Studio-konseptet: komplett bad, én kontakt, avtalt pris</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Bestem og book neste steg</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Vurder riktig neste steg: inspirasjonstime, befaring, eller avtal oppfølging</span>
+              <div class="ck-note">Book inspirasjonstime i Studio, befaring hjemme, eller avtal oppfølging</div>
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer kunden i OptiMind umiddelbart — navn, telefon, e-post og adresse</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Book og registrer neste steg i OptiMind samme dag</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind sender automatisk bekreftelse til kunden</span>
+              <div class="ck-note">Automatisk — ingen manuell handling nødvendig</div>
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="fcl-2-summary" class="ck-summary-text">0 av 7 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'fcl-2',7)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="fcl-3">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Gjennomfør befaring</span>
+      <span class="ck-head-sub">Hjemme hos kunden eller i butikk — fundamentet for hele prosjektet</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Kritisk</span>
+      <span class="ck-progress-text" id="fcl-3-count">0 / 21</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="fcl-3-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Forberedelse — hjemme eller på vei</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Les gjennom kundens informasjon og eventuelle notater fra inspirasjonstime i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ha lasermåler, kamera, notater og nødvendig utstyr klart</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ha OptiMind åpent og klar for registrering underveis</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Teknisk kartlegging</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta nøyaktige mål av rommet med lasermåler: lengde, bredde og takhøyde</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Mål plassering og størrelse på alle dører og vinduer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Dokumenter eksisterende rørføringer: inntakspunkter for vann og avløpsrør</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Dokumenter plassering av sluk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Dokumenter elektriske punkter: stikkontakter, lysbrytere og ventilasjon</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Fotografer rommet systematisk fra alle fire vegger, tak og gulv</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Kundesamtalen</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kartlegg kundens ønsker og drømmebad — still åpne spørsmål</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar budsjett</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gå gjennom MIND-stilene og hjelp kunden å velge stilretning og varianter</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forklar hva som skjer videre: Designer lager 3D-forslag, tegnetime presenterer dette</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Book tegnetime — GJØRES FØR DU FORLATER KUNDEN</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Åpne OptiMind og finn ledig tid for tegnetime med Designer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avtal dato og tidspunkt med kunden ansikt til ansikt</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer og bekreft tegnetimen i OptiMind mens du er hos kunden</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind sender automatisk bekreftelse og forberedelsesinfo til kunden</span>
+              <div class="ck-note">Automatisk — kunden får vite hva de skal forberede</div>
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Last opp dokumentasjon — SAME DAG</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Last opp alle mål i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Last opp alle bilder: vegger, tak, gulv, rørføringer, sluk og elektrisk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Skriv notater: kundens ønsker, valgt MIND-stil, budsjett og begrensninger</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontroller at befaring kan sendes inn — tegnetime SKAL være bekreftet i OptiMind</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="fcl-3-summary" class="ck-summary-text">0 av 21 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'fcl-3',21)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="fcl-4">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Motta sak fra tegnetime og send totaltilbud</span>
+      <span class="ck-head-sub">Innen 48 timer etter mottatt sak fra Designer via OptiMind</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-orange">48t frist</span>
+      <span class="ck-progress-text" id="fcl-4-count">0 / 10</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="fcl-4-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Åpne saken og gjennomgå dokumentasjon</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Åpne saken i OptiMind umiddelbart — 48-timersfristen starter nå</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gjennomgå tegning og produktliste grundig</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar eventuelle uklarheter raskt med Designer via OptiMind</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Kalkylér og kvalitetssikre tilbudet</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kalkuler komplett montering og installasjon basert på tegning og rom</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Legg til alle tilleggstjenester: rørlegger, elektro, flislegging, maling etc.</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Legg til alle gjennomføringskostnader: frakt, deponi, rigg</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Bekreft at tilbudet kun inneholder samlet produktpakkepris — aldri enkeltpriser</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontroller at dette er 1 tilbud på 1 bad — ikke parallelle alternativer</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Send tilbudet</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Send totaltilbudet til kunden via OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind varsler kunden automatisk om at tilbud er tilgjengelig</span>
+              <div class="ck-note">Automatisk — kunden får SMS og e-post</div>
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="fcl-4-summary" class="ck-summary-text">0 av 10 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'fcl-4',10)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="fcl-5">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Følg opp tilbudet og avslutt saken</span>
+      <span class="ck-head-sub">Ring kunden innen 2–3 virkedager · Håndter aksept eller avslag korrekt</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-sand">Oppfølging</span>
+      <span class="ck-progress-text" id="fcl-5-count">0 / 12</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="fcl-5-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Tilbudsoppfølging — ring innen 2–3 virkedager</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk om kunden har åpnet tilbudet i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ring kunden — spør om de har sett tilbudet og om det er spørsmål</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar status: aksept, justeringsbehov, spørsmål, mer tid eller avslag</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg samtalen og utfallet i OptiMind med dato og resultat</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Ved aksept</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer aksepten i OptiMind umiddelbart</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind sender automatisk ordrebekreftelse til kunden</span>
+              <div class="ck-note">Automatisk</div>
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar leveringstidspunkt med kunden</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Koordiner monterings- og installasjonstidspunkt med håndverker</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">KTI-undersøkelse gjennomføres av Studiokoordinator — ikke av deg</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Ved avslag</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta avslaget profesjonelt — ingen press eller skuffelse overfor kunden</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer avslaget i OptiMind med årsak: pris, timing, konkurrent, prosess eller annet</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Noter tydelig dersom avslaget skyldes timing</span>
+              <div class="ck-note">Studiokoordinator setter reaktivering</div>
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="fcl-5-summary" class="ck-summary-text">0 av 12 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'fcl-5',12)">Nullstill</button>
+    </div>
+  </div>
+</div>
+    </div>
+    <div class="role-panel" data-role="designer">
+      
+<div class="ck-section reveal" id="dcl-1">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Gjennomfør inspirasjonstime i Vikingbad Studio</span>
+      <span class="ck-head-sub">Guidet omvisning — kunden velger stilretning og prosessen starter</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-oliven">Studio</span>
+      <span class="ck-progress-text" id="dcl-1-count">0 / 9</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="dcl-1-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Forberedelse</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Les gjennom kundens forespørsel og eventuelle notater i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sørg for at alle fem MIND-stiler er tilgjengelig og presentable i showroom</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Gjennomføring</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta imot kunden og gi guidet omvisning gjennom de ulike baderomsmiljøene</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Presenter og forklar forskjellene mellom alle fem MIND-stiler</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Hjelp kunden å velge stilretning og varianter</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar budsjett, romstørrelse og eventuelle tekniske forutsetninger</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Registrer og book neste steg</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer valgt MIND-stil og notater fra samtalen i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Book og registrer befaring i OptiMind — SAME DAG som inspirasjonstimen</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind sender automatisk bekreftelse på befaring til kunden</span>
+              <div class="ck-note">Automatisk</div>
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="dcl-1-summary" class="ck-summary-text">0 av 9 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'dcl-1',9)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="dcl-2">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Forbered tegnetimen — utarbeid 3D-løsningsforslag</span>
+      <span class="ck-head-sub">Etter at befaringsdokumentasjon er lastet opp av forhandler</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Nøkkelmoment</span>
+      <span class="ck-progress-text" id="dcl-2-count">0 / 11</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="dcl-2-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Gjennomgå befaringsdokumentasjon</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Åpne saken i OptiMind og les gjennom alle notater fra befaring</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontroller at alle nødvendige mål er tilstede og korrekte</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontroller at bilder dekker alle vegger, gulv, tak og installasjoner</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Er dokumentasjonen ufullstendig? Kontakt forhandler via OptiMind FØR du starter</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Utarbeid løsningsforslaget</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Utarbeid ferdig 3D-løsningsforslag basert på valgt MIND-stil og kundens ønsker</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontroller at løsningen er teknisk gjennomførbar</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Utarbeid ett alternativt forslag dersom primærønske ikke lar seg løse</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forbered produktliste knyttet til løsningsforslaget</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Klar til tegnetime</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kvitter sjekkliste for forberedelse i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Bekreft: 3D-forslag er ferdig og presentasjonsklart</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Tegnetime gjennomføres ALDRI uten ferdig forberedt 3D-forslag</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="dcl-2-summary" class="ck-summary-text">0 av 11 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'dcl-2',11)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="dcl-3">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Gjennomfør tegnetime — presenter, juster og konkluder</span>
+      <span class="ck-head-sub">Faglig ansvar: Designer · Kommersielt eierskap: Forhandler</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Beslutningsmoment</span>
+      <span class="ck-progress-text" id="dcl-3-count">0 / 12</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="dcl-3-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Oppstart av møtet</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ønsker kunden velkommen og sett en trygg, strukturert ramme for møtet</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gi en kort gjennomgang av hva som skjer: presentasjon → dialog → konklusjon</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Presentasjon og dialog</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Presenter det ferdige 3D-løsningsforslaget strukturert og engasjerende</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gjennomfør nødvendige justeringer i dialog med kunden underveis</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Har kunden flere bad: behandle hvert bad separat og konkluder individuelt</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forklar videre prosess grundig — kunden skal forlate møtet med full forståelse</span>
+              <div class="ck-note">Designer sender tegning til forhandler → forhandler sender komplett totaltilbud innen 48t</div>
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Overlevér brosjyre om videre prosess til kunden</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Konklusjon og registrering</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Konkluder på én endelig tegning per bad</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer bad korrekt i OptiMind — 1 bad = 1 registrert sakenhet</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Aldri opprette flere tilbud på samme bad</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">OptiMind genererer automatisk oppsummering og sender til kunden</span>
+              <div class="ck-note">Automatisk — kunden mottar 3D og produktpakkepris etter møtet</div>
+            </div>
+          </div>
+          <div class="ck-item ck-item-auto" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">⚡</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Saken sendes automatisk til forhandler — 48-timersfristen begynner nå</span>
+              <div class="ck-note">Automatisk</div>
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="dcl-3-summary" class="ck-summary-text">0 av 12 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'dcl-3',12)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="dcl-4">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Kontakt sluttkunden om forhandler ikke åpner sak innen 48t</span>
+      <span class="ck-head-sub">Utløses av OptiMind-varsel — trygge kunden uten å overta tilbudsarbeidet</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Absolutt krav</span>
+      <span class="ck-progress-text" id="dcl-4-count">0 / 7</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="dcl-4-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Når du mottar 48t-varsel fra OptiMind</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk OptiMind og bekreft at forhandler faktisk ikke har åpnet saken</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Varsle Studiokoordinator umiddelbart</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ring sluttkunden og presenter deg som ansvarlig designer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Bekreft at tegning og 3D-løsning er ferdig og klar</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forsikre kunden om at totaltilbudet er på vei fra forhandler</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Overta IKKE tilbudsarbeidet — trygge kunden er din rolle</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg samtalen i OptiMind med dato og tidspunkt</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="dcl-4-summary" class="ck-summary-text">0 av 7 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'dcl-4',7)">Nullstill</button>
+    </div>
+  </div>
+</div>
+    </div>
+    <div class="role-panel" data-role="koordinator">
+      
+<div class="ck-section reveal" id="kcl-1">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Forhandler har ikke ringt kunden innen 48 timer</span>
+      <span class="ck-head-sub">Utløser: OptiMind varsler etter 48t uten registrert kontakt</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Rødt flagg</span>
+      <span class="ck-progress-text" id="kcl-1-count">0 / 8</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-1-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Handle umiddelbart — same arbeidsdag</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Åpne saken i OptiMind og gjennomgå all historikk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt forhandler direkte — krev forklaring og sett ny konkret frist</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg forklaring og ny tidslinje i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk om kunden allerede har kontaktet Vikingbad direkte</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ring kunden ved behov — beklager forsinkelsen og sikrer befaring</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Følg opp at forhandler faktisk ringer kunden innen ny satt frist</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Ved gjentatte brudd</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer avvik på partner i OptiMind med dato og saksnummer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Merk saken for oppfølging i neste partnergjennomgang</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-1-summary" class="ck-summary-text">0 av 8 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-1',8)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-2">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Befaringsdokumentasjon ikke lastet opp innen 48 timer</span>
+      <span class="ck-head-sub">Utløser: OptiMind varsler — Designer kan ikke starte forberedelse</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Rødt flagg</span>
+      <span class="ck-progress-text" id="kcl-2-count">0 / 5</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-2-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Handle umiddelbart</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt forhandler direkte — krev umiddelbar opplasting</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Avklar med Designer om tegnetime må utsettes</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Informer kunden dersom tegnetime utsettes — gi ny dato</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg all håndtering i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Bekreft at dokumentasjon er lastet opp og at Designer har mottatt saken</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-2-summary" class="ck-summary-text">0 av 5 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-2',5)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-3">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Forhandler har ikke sendt totaltilbud innen 48 timer</span>
+      <span class="ck-head-sub">Utløser: OptiMind varsler Studio Ansvarlig (Grimstad) / Studio Leder</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Rødt flagg</span>
+      <span class="ck-progress-text" id="kcl-3-count">0 / 7</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-3-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Handle same arbeidsdag</div>
+        <div class="ck-sub-items">
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gjennomgå saken i OptiMind og kartlegg status</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt forhandler direkte — krev forklaring og sett ny konkret leveringsfrist</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Oppdater status og ny frist i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt kunden dersom forsinkelsen er merkbar — beklager og gir ny dato</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Overvåk at forhandler faktisk sender tilbudet innen ny frist</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Ved gjentatte brudd</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Registrer avvik på partner i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Merk for kvartalsvis gjennomgang — gjentatte brudd kan påvirke partnerstatus</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-3-summary" class="ck-summary-text">0 av 7 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-3',7)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-4">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Tilbud ikke åpnet innen 48t / Forhandler ikke fulgt opp</span>
+      <span class="ck-head-sub">Utløser: OptiMind varsler — forbruker passiv eller forhandler ikke fulgt opp</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Rødt flagg</span>
+      <span class="ck-progress-text" id="kcl-4-count">0 / 4</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-4-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Handle umiddelbart</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk saken i OptiMind — har forhandler fått varselet og gjort noe?</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt forhandler — krev at de ringer kunden direkte innen 24 timer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Dersom forhandler ikke følger opp — ring kunden direkte</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Loggfør all oppfølging i OptiMind med dato og resultat</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-4-summary" class="ck-summary-text">0 av 4 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-4',4)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-5">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Forbruker har ikke respondert på tilbud innen 5 dager</span>
+      <span class="ck-head-sub">Utløser: 5-dagersregelen — ingen passivitet tillatt</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-red">Rødt flagg</span>
+      <span class="ck-progress-text" id="kcl-5-count">0 / 5</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-5-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Gjennomfør oppfølging</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sjekk saken i OptiMind og les all historikk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kontakt forhandler — avklar situasjonen</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forhandler kontakter kunden direkte</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg alle tiltak og utfall i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Bekreft at saken er aktiv og under oppfølging</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-5-summary" class="ck-summary-text">0 av 5 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-5',5)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-6">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Gjennomfør KTI-undersøkelse etter akseptert tilbud</span>
+      <span class="ck-head-sub">Alltid koordinator — aldri forhandler</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-brun">KTI</span>
+      <span class="ck-progress-text" id="kcl-6-count">0 / 7</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-6-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Gjennomfør KTI-undersøkelse</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Motta varsel fra OptiMind om akseptert tilbud</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta kontakt med kunden mens inntrykkene er ferske — innen 1–2 dager etter aksept</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Gjennomfør undersøkelsen strukturert: helhetsbilde, prosess, forhandler og designer</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Loggfør alle svar strukturert i OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Identifiser eventuelle forbedringsområder fra tilbakemeldingen</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Del innsikt med Studio Leder i neste statusmøte</span>
+              
+            </div>
+          </div>
+          <div class="ck-item ck-item-warn" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">!</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">KTI gjennomføres ALLTID av Studiokoordinator — aldri av forhandler</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-6-summary" class="ck-summary-text">0 av 7 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-6',7)">Nullstill</button>
+    </div>
+  </div>
+</div>
+
+<div class="ck-section reveal" id="kcl-7">
+  <button class="ck-head" onclick="ckToggleSection(this)">
+    <div class="ck-head-left">
+      <span class="ck-head-title">Følg opp avslag — kartlegg årsak og sett reaktivering</span>
+      <span class="ck-head-sub">Du eier avslagsoppfølgingen — forhandler registrerer</span>
+    </div>
+    <div class="ck-head-right">
+      <span class="ck-badge ck-badge-brun">↺ Avslag</span>
+      <span class="ck-progress-text" id="kcl-7-count">0 / 7</span>
+      <span class="ck-chev">▾</span>
+    </div>
+  </button>
+  <div class="ck-progress-bar"><div class="ck-progress-fill" id="kcl-7-bar"></div></div>
+  <div class="ck-body">
+    
+      <div class="ck-sub">
+        <div class="ck-sub-head">Kartlegg årsaken</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Motta varsel om avslag fra OptiMind</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Ta kontakt med kunden — spør åpent om årsaken</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Kartlegg årsaken: pris, timing, konkurrent, prosessopplevelse eller annet?</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Håndter avslaget med respekt — kunden skal sitte igjen med godt inntrykk</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Logg årsak strukturert i OptiMind</span>
+              
+            </div>
+          </div></div>
+      </div>
+      <div class="ck-sub">
+        <div class="ck-sub-head">Reaktivering og læring</div>
+        <div class="ck-sub-items">
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Sett reaktivering i OptiMind dersom avslaget skyldes timing</span>
+              
+            </div>
+          </div>
+          <div class="ck-item" onclick="ckToggle(this)">
+            <div class="ck-icon-col"><span class="ck-icon">☐</span></div>
+            <div class="ck-text-col">
+              <span class="ck-text">Forbered avslagsinnsikten for kvartalsvis gjennomgang med Studio Leder</span>
+              
+            </div>
+          </div></div>
+      </div>
+    <div class="ck-footer">
+      <span id="kcl-7-summary" class="ck-summary-text">0 av 7 fullført</span>
+      <button class="ck-reset" onclick="ckReset(event,'kcl-7',7)">Nullstill</button>
+    </div>
+  </div>
+</div>
+    </div>
+  </main>
+
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-logo">
+      <img src="https://www.vikingbad.no/wp-content/uploads/2025/01/Vikingbad-logo-hvit-RGB.svg" alt="Vikingbad"
+        onerror="this.style.display='none'">
+    </div>
+    <div class="foot-tag">Vi gjør bad enkelt</div>
+    <div class="foot-copy">Komplett prosessguide · Vikingbad Studio</div>
+  </div>
+</footer>
+
+<script>
+/* ── MODULE SWITCHER ── */
+function switchMod(mod, btn) {
+  document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mod-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('mod-' + mod).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  initReveal();
+}
+
+/* ── KUNDEREISE ── */
+function toggleTp(btn) {
+  const tp = btn.closest('.tp');
+  tp.classList.toggle('open');
+}
+function krNav(btn) {
+  document.querySelectorAll('.kr-nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const target = document.getElementById(btn.dataset.target);
+  if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+}
+// Sticky nav highlight
+function updateKrNav() {
+  const phases = document.querySelectorAll('.phase');
+  let active = null;
+  phases.forEach(ph => {
+    const r = ph.getBoundingClientRect();
+    if (r.top <= 120) active = ph.id;
+  });
+  if (active) {
+    document.querySelectorAll('.kr-nav-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.target === active);
+    });
+  }
+}
+
+/* ── RUTINER ── */
+function switchRole(role, btn) {
+  const container = btn.closest('.mod-panel');
+  container.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  container.querySelectorAll('.role-panel').forEach(p => p.classList.remove('active'));
+  container.querySelector('[data-role="' + role + '"]').classList.add('active');
+  initReveal();
+}
+function toggleStep(btn) {
+  btn.closest('.ru-step').classList.toggle('open');
+}
+
+/* ── SJEKKLISTER ── */
+function switchCkRole(role, btn) {
+  const container = btn.closest('.mod-panel');
+  container.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  container.querySelectorAll('.role-panel').forEach(p => p.classList.remove('active'));
+  container.querySelector('[data-role="' + role + '"]').classList.add('active');
+  initReveal();
+}
+function ckToggleSection(btn) {
+  btn.closest('.ck-section').classList.toggle('open');
+}
+function ckToggle(el) {
+  el.classList.toggle('checked');
+  const sec = el.closest('.ck-section');
+  if (!sec) return;
+  const id = sec.id;
+  const total = sec.querySelectorAll('.ck-item').length;
+  const done  = sec.querySelectorAll('.ck-item.checked').length;
+  const bar   = document.getElementById(id + '-bar');
+  const count = document.getElementById(id + '-count');
+  const summ  = document.getElementById(id + '-summary');
+  if (bar)   bar.style.width  = (done / total * 100) + '%';
+  if (count) count.textContent = done + ' / ' + total;
+  if (summ)  summ.textContent  = done + ' av ' + total + ' fullført';
+}
+function ckReset(e, id, total) {
+  e.stopPropagation();
+  const sec = document.getElementById(id);
+  if (!sec) return;
+  sec.querySelectorAll('.ck-item').forEach(i => i.classList.remove('checked'));
+  const bar   = document.getElementById(id + '-bar');
+  const count = document.getElementById(id + '-count');
+  const summ  = document.getElementById(id + '-summary');
+  if (bar)   bar.style.width  = '0%';
+  if (count) count.textContent = '0 / ' + total;
+  if (summ)  summ.textContent  = '0 av ' + total + ' fullført';
+}
+
+/* ── REVEAL ── */
+let revealObserver;
+function initReveal() {
+  if (revealObserver) revealObserver.disconnect();
+  revealObserver = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 30);
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.04 });
+  document.querySelectorAll('.mod-panel.active .reveal:not(.in)').forEach(el => revealObserver.observe(el));
+}
+
+/* ── INIT ── */
+window.addEventListener('load', () => {
+  initReveal();
+});
+window.addEventListener('scroll', updateKrNav, { passive: true });
+</script>
+</body>
+</html>
